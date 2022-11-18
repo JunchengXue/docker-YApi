@@ -1,12 +1,14 @@
 ######## 构建 ########
-FROM --platform=${BUILDPLATFORM:-amd64} node:12.16.3-alpine3.11 as builder
+FROM --platform=${BUILDPLATFORM:-amd64} node:16-alpine as builder
 
 # 安装构建工具
-RUN apk add --update --no-cache ca-certificates curl wget cmake build-base git bash python make gcc g++ zlib-dev autoconf automake file nasm \
+RUN apk add --update --no-cache ca-certificates curl wget cmake build-base git python3 bash make gcc g++ zlib-dev autoconf automake file nasm \
   && update-ca-certificates
 
 # YApi 版本
 ENV YAPI_VERSION=1.12.0
+
+RUN npm install -g ykit
 
 # 编译脚本
 WORKDIR /yapi/scripts
@@ -45,7 +47,7 @@ RUN rm -rf /yapi/scripts
 
 
 ######## 镜像 ########
-FROM node:12.16.3-alpine3.11
+FROM node:16-alpine
 
 WORKDIR /yapi
 
