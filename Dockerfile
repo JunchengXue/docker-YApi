@@ -34,13 +34,13 @@ RUN node /yapi/scripts/prepare.js $(pwd)
 RUN yarn
 
 # 清理文件
-RUN node /yapi/scripts/clean.js $(pwd)
+# RUN node /yapi/scripts/clean.js $(pwd)
 
 # 构建应用
 RUN yarn build-client
 
 # 再次清理以删除构建缓存文件
-RUN node /yapi/scripts/clean.js $(pwd)
+# RUN node /yapi/scripts/clean.js $(pwd)
 
 # 删除脚本
 RUN rm -rf /yapi/scripts
