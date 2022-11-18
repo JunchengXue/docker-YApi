@@ -2,20 +2,20 @@
 FROM --platform=${BUILDPLATFORM:-amd64} node:14-alpine3.16 as builder
 
 # 安装构建工具
-RUN apk add --update --no-cache ca-certificates curl wget cmake build-base git python3 bash make gcc g++ zlib-dev autoconf automake file nasm \
-  && update-ca-certificates
+# RUN apk add --update --no-cache ca-certificates curl wget cmake build-base git python3 bash make gcc g++ zlib-dev autoconf automake file nasm \
+#   && update-ca-certificates
 
-# YApi 版本
-ENV YAPI_VERSION=1.12.0
+# # YApi 版本
+# ENV YAPI_VERSION=1.12.0
 
-RUN npm install -g ykit
+# RUN npm install -g ykit
 
-# 编译脚本
-WORKDIR /yapi/scripts
-COPY . .
-RUN yarn && yarn build
+# # 编译脚本
+# WORKDIR /yapi/scripts
+# COPY . .
+# RUN yarn && yarn build
 
-WORKDIR /yapi/vendors
+# WORKDIR /yapi/vendors
 
 # 拉取 YApi 源码
 RUN git clone \
@@ -24,35 +24,38 @@ RUN git clone \
   --depth 1 \
   https://github.com/YMFE/yapi.git .
 
+
+RUN npm install
+
 # 拷贝启动脚本
-RUN cp /yapi/scripts/start.js ./start.js
+# RUN cp /yapi/scripts/start.js ./start.js
 
-# 执行一些准备工作
-RUN node /yapi/scripts/prepare.js $(pwd)
+# # 执行一些准备工作
+# RUN node /yapi/scripts/prepare.js $(pwd)
 
-# 安装依赖
-RUN yarn
+# # 安装依赖
+# RUN yarn
 
-# 清理文件
-# RUN node /yapi/scripts/clean.js $(pwd)
+# # 清理文件
+# # RUN node /yapi/scripts/clean.js $(pwd)
 
-# 构建应用
-RUN yarn build-client
+# # 构建应用
+# RUN yarn build-client
 
-# 再次清理以删除构建缓存文件
-# RUN node /yapi/scripts/clean.js $(pwd)
+# # 再次清理以删除构建缓存文件
+# # RUN node /yapi/scripts/clean.js $(pwd)
 
-# 删除脚本
-RUN rm -rf /yapi/scripts
+# # 删除脚本
+# RUN rm -rf /yapi/scripts
 
 
-######## 镜像 ########
-FROM node:16-alpine
+# ######## 镜像 ########
+# FROM node:16-alpine
 
-WORKDIR /yapi
+# WORKDIR /yapi
 
-COPY --from=builder /yapi .
+# COPY --from=builder /yapi .
 
-EXPOSE 3000
+# EXPOSE 3000
 
-CMD ["node", "/yapi/vendors/start.js"]
+# CMD ["node", "/yapi/vendors/start.js"]
