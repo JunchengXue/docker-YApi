@@ -1,5 +1,5 @@
 ######## 构建 ########
-FROM --platform=${BUILDPLATFORM:-amd64} node:16-alpine as builder
+FROM --platform=${BUILDPLATFORM:-amd64} node:14-alpine3.16 as builder
 
 # 安装构建工具
 RUN apk add --update --no-cache ca-certificates curl wget cmake build-base git python3 bash make gcc g++ zlib-dev autoconf automake file nasm \
